@@ -4,7 +4,7 @@ import pytest
 
 from vsr53.DisplayModes import Units
 from vsr53.sys import dev_tty
-from vsr53.vsr53dl import VSR53DL
+from vsr53.vsr53 import VSR53DL
 
 
 @pytest.fixture()

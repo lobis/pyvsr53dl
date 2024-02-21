@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 
 from vsr53.logger import log
-from vsr53.vsr53dl import VSR53DL
+from vsr53.vsr53 import VSR53DL
 
 log.setLevel(logging.ERROR)
 

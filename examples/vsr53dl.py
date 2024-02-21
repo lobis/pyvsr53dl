@@ -5,7 +5,7 @@ import logging
 from vsr53.DisplayModes import Orientation as Orientation
 from vsr53.DisplayModes import Units as Units
 from vsr53.logger import log
-from vsr53.vsr53dl import VSR53DL
+from vsr53.vsr53 import VSR53DL
 
 if __name__ == "__main__":
     from vsr53.sys import dev_tty
