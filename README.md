@@ -1,5 +1,7 @@
 # [VSR53](https://github.com/lobis/vsr53)
 
+[![PyPI version](https://badge.fury.io/py/vsr53.svg)](https://badge.fury.io/py/vsr53)
+
 [![Build and Test](https://github.com/lobis/vsr53/actions/workflows/build.yaml/badge.svg)](https://github.com/lobis/vsr53/actions/workflows/build.yaml)
 
 This is a Python library to communicate with
@@ -18,6 +20,9 @@ default value (to 9600 instead of 115200) it works perfectly.
 
 ## Installation
 
+This library is [available in PyPI](https://pypi.org/project/vsr53/) and can be
+installed with pip:
+
 ```bash
 pip install vsr53
 ```
@@ -27,7 +32,7 @@ pip install vsr53
 ```python
 from vsr53 import VSR53USB
 
-port = "/dev/ttyUSB0" # replace with the device port of your gauge
+port = "/dev/ttyUSB0"  # replace with the device port of your gauge
 with VSR53USB(port) as gauge:
     print(gauge.get_device_type())
     print(gauge.get_product_name())

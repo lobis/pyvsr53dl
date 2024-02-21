@@ -28,7 +28,7 @@ jobs:
       - name: Install 📦
         run: python -m pip install .
 
-      - name: Print package version
+      - name: Print 📦 version
         run:
           python -c "import vsr53; print('vsr53 version:', vsr53.__version__)"
 
