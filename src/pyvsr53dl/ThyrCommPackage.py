@@ -1,24 +1,30 @@
-from pyvsr53dl.logger import log as log
+from __future__ import annotations
+
 from pyvsr53dl.AccessCodes import AccessCode as AC
 from pyvsr53dl.Commands import Commands as CMD
 from pyvsr53dl.DisplayModes import Units as Units
+from pyvsr53dl.logger import log as log
+
 # from DISPLAY import Orientation as Orientation
 
-class ThyrCommPackage():
+
+class ThyrCommPackage:
     """
     Thyracont Communication Protocol Package class to create and compose its messages
     """
+
     def __init__(self, address):
-        self._address = address # 3 bytes
-        self._access_code = None # 1 byte
-        self._cmd = None # 2 bytes
-        self._data_length = 0 # 2 bytes
-        self._data = 0 # N bytes
-        self._checksum = None # 1 byte
+        self._address = address  # 3 bytes
+        self._access_code = None  # 1 byte
+        self._cmd = None  # 2 bytes
+        self._data_length = 0  # 2 bytes
+        self._data = 0  # N bytes
+        self._checksum = None  # 1 byte
 
     @property
     def address(self):
         return self._address
+
     @address.setter
     def address(self, address):
         self._address = address
@@ -26,6 +32,7 @@ class ThyrCommPackage():
     @property
     def access_code(self):
         return self._access_code
+
     @access_code.setter
     def access_code(self, access_code):
         self._access_code = access_code
@@ -33,6 +40,7 @@ class ThyrCommPackage():
     @property
     def cmd(self):
         return self._cmd
+
     @cmd.setter
     def cmd(self, cmd):
         self._cmd = cmd
@@ -40,6 +48,7 @@ class ThyrCommPackage():
     @property
     def data_length(self):
         return self._data_length
+
     @data_length.setter
     def data_length(self, data_length):
         self._data_length = data_length
@@ -47,18 +56,19 @@ class ThyrCommPackage():
     @property
     def data(self):
         return self._data
+
     @data.setter
     def data(self, data):
         self._data = data
 
     def get_checksum(self):
-        address = self.get_ascii_list(f'{self.address:03d}')
-        access_code = self.get_ascii_list(f'{self.access_code}')
+        address = self.get_ascii_list(f"{self.address:03d}")
+        access_code = self.get_ascii_list(f"{self.access_code}")
         cmd = self.get_ascii_list(self.cmd)
-        length = self.get_ascii_list(f'{self.data_length:02d}')
+        length = self.get_ascii_list(f"{self.data_length:02d}")
         checksum_list = [address, access_code, cmd, length]
         if self.data_length:
-            checksum_list.append(self.get_ascii_list(f'{self.data}'))
+            checksum_list.append(self.get_ascii_list(f"{self.data}"))
         checksum = sum([sum(values) for values in checksum_list])
         return chr(checksum % 64 + 64)
 
@@ -69,12 +79,17 @@ class ThyrCommPackage():
         """
         if self.data:
             self.data_length = len(str(self.data))
-        comm_package = [f'{self.address:03d}', f'{self.access_code}', self.cmd, f'{self.data_length:02d}']
+        comm_package = [
+            f"{self.address:03d}",
+            f"{self.access_code}",
+            self.cmd,
+            f"{self.data_length:02d}",
+        ]
         if self.data_length:
-            data = f'{self.data}'
+            data = f"{self.data}"
             comm_package.append(data)
         comm_package.append(self.get_checksum())
-        comm_package.append('\r')
+        comm_package.append("\r")
         return comm_package
 
     def get_string(self):
@@ -94,7 +109,7 @@ class ThyrCommPackage():
         return package_ascii_list
 
     def parse_answer(self, answer):
-        answer = answer.decode('utf-8')
+        answer = answer.decode("utf-8")
 
         log.debug(answer)
         self.address = int(answer[0:3])
@@ -102,31 +117,30 @@ class ThyrCommPackage():
         self.cmd = answer[4:6]
         self.data_length = int(answer[6:8])
         if self.data_length:
-            self.data = answer[8:8+self.data_length]
+            self.data = answer[8 : 8 + self.data_length]
         else:
             self.data = 0
-        checksum = answer[8+self.data_length]
+        checksum = answer[8 + self.data_length]
 
         log.debug(answer)
-        log.debug(f'Device Address: {self.address}')
-        log.debug(f'Access Code: {self.access_code}')
-        log.debug(f'CMD: {self.cmd}')
-        log.debug(f'Data Length: {self.data_length}')
-        log.debug(f'Data: {self.data}')
-        log.debug(f'Checksum: {self.get_checksum()}')
+        log.debug(f"Device Address: {self.address}")
+        log.debug(f"Access Code: {self.access_code}")
+        log.debug(f"CMD: {self.cmd}")
+        log.debug(f"Data Length: {self.data_length}")
+        log.debug(f"Data: {self.data}")
+        log.debug(f"Checksum: {self.get_checksum()}")
         if checksum == self.get_checksum():
             log.debug("Checksum matches!")
         else:
             log.debug("Checksum mismatch!")
         return answer
 
-
     @staticmethod
     def get_ascii_list(string):
-        return [ord(c) for c in(string)]
+        return [ord(c) for c in (string)]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     SENSOR_ADDRESS = 2
     t_package = ThyrCommPackage(SENSOR_ADDRESS)
     t_package.access_code = AC.WR_TX

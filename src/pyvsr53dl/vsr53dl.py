@@ -1,14 +1,18 @@
+from __future__ import annotations
+
+import re
+from abc import ABC, abstractmethod
+
 import serial
 import serial.rs485
-import re
-from pyvsr53dl.ThyrCommPackage import ThyrCommPackage
+
+from pyvsr53dl import ErrorMessages
 from pyvsr53dl.AccessCodes import AccessCode as AC
 from pyvsr53dl.Commands import Commands as CMD
-from pyvsr53dl.DisplayModes import Units as Units
 from pyvsr53dl.DisplayModes import Orientation as Orientation
+from pyvsr53dl.DisplayModes import Units as Units
 from pyvsr53dl.logger import log
-from pyvsr53dl import ErrorMessages
-from abc import ABC, abstractmethod
+from pyvsr53dl.ThyrCommPackage import ThyrCommPackage
 
 
 class PyVSR53(ABC):
@@ -36,7 +40,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Type_Device
         device_type = self._read_data_transaction(pack)
-        log.info(f'Device type: {device_type}')
+        log.info(f"Device type: {device_type}")
         return device_type
 
     def get_product_name(self):
@@ -47,7 +51,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Product_Name
         product_name = self._read_data_transaction(pack)
-        log.info(f'Product name: {product_name}')
+        log.info(f"Product name: {product_name}")
         return product_name
 
     def get_serial_number_device(self):
@@ -58,7 +62,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Serial_Number_Device
         device_serial_number = self._read_data_transaction(pack)
-        log.info(f'Device serial number: {device_serial_number}')
+        log.info(f"Device serial number: {device_serial_number}")
         return device_serial_number
 
     def get_serial_number_head(self):
@@ -69,7 +73,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Serial_Number_Head
         sensor_head_serial_number = self._read_data_transaction(pack)
-        log.info(f'Head serial number: {sensor_head_serial_number}')
+        log.info(f"Head serial number: {sensor_head_serial_number}")
         return sensor_head_serial_number
 
     def get_device_version(self):
@@ -80,7 +84,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Version_Device
         device_version = float(self._read_data_transaction(pack))
-        log.info(f'Device version: {device_version}')
+        log.info(f"Device version: {device_version}")
         return device_version
 
     def get_firmware_version(self):
@@ -91,7 +95,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Version_Firmware
         firmware_version = self._read_data_transaction(pack)
-        log.info(f'Firmware version: {firmware_version}')
+        log.info(f"Firmware version: {firmware_version}")
         return firmware_version
 
     def get_bootloader_version(self):
@@ -102,7 +106,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Version_Bootloader
         bootloader_version = float(self._read_data_transaction(pack))
-        log.info(f'Bootloader version: {bootloader_version}')
+        log.info(f"Bootloader version: {bootloader_version}")
         return bootloader_version
 
     def set_baud_rate(self, baud_rate):
@@ -114,7 +118,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Baud_Rate
         pack.data = baud_rate
-        log.info(f'Setting baud rate to {baud_rate}')
+        log.info(f"Setting baud rate to {baud_rate}")
         self._write_data_transaction(pack)
 
     def get_response_delay(self):
@@ -126,7 +130,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Response_Delay
         response_delay = float(self._read_data_transaction(pack))
-        log.info(f'Response delay: {response_delay}')
+        log.info(f"Response delay: {response_delay}")
         return response_delay
 
     def set_response_delay(self, response_delay):
@@ -138,7 +142,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Response_Delay
         pack.data = response_delay
-        log.info(f'Setting response delay to: {response_delay}')
+        log.info(f"Setting response delay to: {response_delay}")
         self._write_data_transaction(pack)
 
     def get_display_unit(self):
@@ -149,7 +153,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Display_Unit
         display_unit = self._read_data_transaction(pack)
-        log.info(f'Display units: {display_unit}')
+        log.info(f"Display units: {display_unit}")
         return display_unit
 
     def set_display_unit(self, display_unit):
@@ -172,10 +176,10 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Display_Orientation
         display_orientation = self._read_data_transaction(pack)
-        display_orientation_name = 'NORMAL'
+        display_orientation_name = "NORMAL"
         if int(display_orientation) != int(Orientation.NORMAL):
-            display_orientation_name = 'ROTATED'
-        log.info(f'Display orientation: {display_orientation_name}')
+            display_orientation_name = "ROTATED"
+        log.info(f"Display orientation: {display_orientation_name}")
         return display_orientation
 
     def set_display_orientation(self, display_orientation):
@@ -187,7 +191,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Display_Orientation
         pack.data = display_orientation
-        log.info(f'Setting display orientation to {display_orientation}')
+        log.info(f"Setting display orientation to {display_orientation}")
         self._write_data_transaction(pack)
 
     def get_operating_hours(self):
@@ -211,7 +215,9 @@ class PyVSR53(ABC):
         data = self._read_data_transaction(pack)
         measurement_range_lo = float(data[1:6])
         measurement_range_hi = float(data[7:11])
-        log.info(f'Measurement range is: {measurement_range_lo, measurement_range_hi} {Units.MBAR}')
+        log.info(
+            f"Measurement range is: {measurement_range_lo, measurement_range_hi} {Units.MBAR}"
+        )
         return measurement_range_lo, measurement_range_hi
 
     def get_measurement_value(self):
@@ -222,7 +228,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Measurement_Value
         pressure_measurement = float(self._read_data_transaction(pack))
-        log.info(f'Measurement is: {pressure_measurement} {Units.MBAR}')
+        log.info(f"Measurement is: {pressure_measurement} {Units.MBAR}")
         return pressure_measurement
 
     def get_measurement_value_pirani(self):
@@ -233,7 +239,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Measurement_Value_1
         pressure_measurement = float(self._read_data_transaction(pack))
-        log.info(f'Measurement with pirani is: {pressure_measurement} {Units.MBAR}')
+        log.info(f"Measurement with pirani is: {pressure_measurement} {Units.MBAR}")
         return pressure_measurement
 
     def get_measurement_value_piezo(self):
@@ -244,7 +250,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Measurement_Value_2
         pressure_measurement = float(self._read_data_transaction(pack))
-        log.info(f'Measurement with piezo is: {pressure_measurement} {Units.MBAR}')
+        log.info(f"Measurement with piezo is: {pressure_measurement} {Units.MBAR}")
         return pressure_measurement
 
     def get_relay_1_status(self):
@@ -258,7 +264,7 @@ class PyVSR53(ABC):
         pattern1 = "T(.*?)F"
         t_value = float(re.search(pattern1, relay_1_status).group(1))
         f_value = float(str(relay_1_status).split("F", 1)[1])
-        log.info(f'Relay 1 status: T{t_value} and F{f_value}')
+        log.info(f"Relay 1 status: T{t_value} and F{f_value}")
         return t_value, f_value
 
     def get_relay_2_status(self):
@@ -272,7 +278,7 @@ class PyVSR53(ABC):
         pattern1 = "T(.*?)F"
         t_value = float(re.search(pattern1, relay_2_status).group(1))
         f_value = float(str(relay_2_status).split("F", 1)[1])
-        log.info(f'Relay 2 status: T{t_value} and F{f_value}')
+        log.info(f"Relay 2 status: T{t_value} and F{f_value}")
         return t_value, f_value
 
     def set_relay_1_status(self, relay_status):
@@ -284,7 +290,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Relay_1
         pack.relay_status = relay_status
-        log.info(f'Setting Relay 1 status: {relay_status}')
+        log.info(f"Setting Relay 1 status: {relay_status}")
         self._write_data_transaction(pack)
 
     def set_relay_2_status(self, relay_status):
@@ -296,7 +302,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Relay_2
         pack.relay_status = relay_status
-        log.info(f'Setting Relay 2 status: {relay_status}')
+        log.info(f"Setting Relay 2 status: {relay_status}")
         self._write_data_transaction(pack)
 
     def restart_device(self):
@@ -307,7 +313,7 @@ class PyVSR53(ABC):
         pack = ThyrCommPackage(self._address)
         pack.cmd = CMD.Device_Restart
         pack.data = 0
-        log.info(f'Restarting device')
+        log.info("Restarting device")
         self._write_data_transaction(pack)
 
     def close_communication(self):
@@ -317,7 +323,7 @@ class PyVSR53(ABC):
         """
         self._port.flush()
         self._port.close()
-        log.info('Closing communication with device')
+        log.info("Closing communication with device")
 
     def _read_data_transaction(self, pack):
         pack.data = 0
@@ -331,11 +337,11 @@ class PyVSR53(ABC):
 
     def _instruction_exchange(self, pack):
         fine_transaction = False
-        message = b''
+        message = b""
         while not fine_transaction:
             self._send_message(pack)
             message = self._receive_message()
-            if message != b'' and message[-1] == 13 and len(message) < 30:
+            if message != b"" and message[-1] == 13 and len(message) < 30:
                 fine_transaction = True
             else:
                 log.error("BAD TRANSACTION")
@@ -343,7 +349,7 @@ class PyVSR53(ABC):
                 self._port.flush()
         pack.parse_answer(message)
         if pack.access_code == AC.ERR_RX:
-            log.error(f'{ErrorMessages.MSG[pack.data]}')
+            log.error(f"{ErrorMessages.MSG[pack.data]}")
         return message
 
     def _send_message(self, pack):
@@ -360,19 +366,21 @@ class PyVSR53DL(PyVSR53):
     """
     Thyracont's VSR53DL vacuum sensor RS458 interface
     """
+
     def __init__(self, device_label: str, address: int = 1, baudrate: int = 115200):
         """
         Constructor will initiate serial port communication in rs485 mode and define address for device
         :param device_label: Device label assigned by the operating system when the device is connected
         :param address: Defined by the address switch mounted in the device from 1 to 16
         """
-        self._port = serial.rs485.RS485(device_label,
-                                        baudrate=baudrate,
-                                        parity=serial.PARITY_NONE,
-                                        stopbits=serial.STOPBITS_ONE,
-                                        bytesize=serial.EIGHTBITS,
-                                        timeout=0.02
-                                        )
+        self._port = serial.rs485.RS485(
+            device_label,
+            baudrate=baudrate,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            bytesize=serial.EIGHTBITS,
+            timeout=0.02,
+        )
 
         self._port.rs485_mode = serial.rs485.RS485Settings()
         self._address = address
@@ -380,19 +388,21 @@ class PyVSR53DL(PyVSR53):
 
 class PyVSR53USB(PyVSR53):
     def __init__(self, device_label: str, address: int = 1, baudrate: int = 9600):
-        self._port = serial.Serial(device_label,
-                                   baudrate=baudrate,
-                                   parity=serial.PARITY_NONE,
-                                   stopbits=serial.STOPBITS_ONE,
-                                   bytesize=serial.EIGHTBITS,
-                                   timeout=0.02
-                                   )
+        self._port = serial.Serial(
+            device_label,
+            baudrate=baudrate,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            bytesize=serial.EIGHTBITS,
+            timeout=0.02,
+        )
         self._address = address
 
 
-if __name__ == '__main__':
-    from pyvsr53dl.sys import dev_tty
+if __name__ == "__main__":
     import logging
+
+    from pyvsr53dl.sys import dev_tty
 
     log.setLevel(logging.INFO)
 

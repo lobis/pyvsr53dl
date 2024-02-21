@@ -2,7 +2,10 @@
 Device access types according Thyracont's Protocol
 """
 
-class AccessCode():
+from __future__ import annotations
+
+
+class AccessCode:
     RD_TX = 0
     RD_RX = 1
     WR_TX = 2
