@@ -6,7 +6,7 @@ requires = [
 build-backend = "hatchling.build"
 
 [project]
-name = "pyvsr53dl"
+name = "vsr53"
 description = "Python Library to interface with Thyracont's VSR53 vacuum gauges"
 authors = [
     { name = "Oscar Martínez", email = "omartinez@ifae.es" },
@@ -34,7 +34,7 @@ dynamic = [
 source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "src/pyvsr53dl/_version.py"
+version-file = "src/vsr53/_version.py"
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -56,9 +56,9 @@ test = [
 ]
 
 [project.urls]
-"Download" = "https://github.com/lobis/pyvsr53dl/releases"
-"Homepage" = "https://github.com/lobis/pyvsr53dl"
-"Bug Tracker" = "https://github.com/lobis/pyvsr53dl/issues"
+"Download" = "https://github.com/lobis/vsr53/releases"
+"Homepage" = "https://github.com/lobis/vsr53"
+"Bug Tracker" = "https://github.com/lobis/vsr53/issues"
 
 [tool.ruff]
 src = ["src"]

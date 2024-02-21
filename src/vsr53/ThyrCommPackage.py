@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from pyvsr53dl.AccessCodes import AccessCode as AC
-from pyvsr53dl.Commands import Commands as CMD
-from pyvsr53dl.DisplayModes import Units as Units
-from pyvsr53dl.logger import log as log
+from vsr53.AccessCodes import AccessCode as AC
+from vsr53.Commands import Commands as CMD
+from vsr53.DisplayModes import Units as Units
+from vsr53.logger import log as log
 
 # from DISPLAY import Orientation as Orientation
 

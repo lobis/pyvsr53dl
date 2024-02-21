@@ -6,13 +6,13 @@ from abc import ABC, abstractmethod
 import serial
 import serial.rs485
 
-from pyvsr53dl import ErrorMessages
-from pyvsr53dl.AccessCodes import AccessCode as AC
-from pyvsr53dl.Commands import Commands as CMD
-from pyvsr53dl.DisplayModes import Orientation as Orientation
-from pyvsr53dl.DisplayModes import Units as Units
-from pyvsr53dl.logger import log
-from pyvsr53dl.ThyrCommPackage import ThyrCommPackage
+from vsr53 import ErrorMessages
+from vsr53.AccessCodes import AccessCode as AC
+from vsr53.Commands import Commands as CMD
+from vsr53.DisplayModes import Orientation as Orientation
+from vsr53.DisplayModes import Units as Units
+from vsr53.logger import log
+from vsr53.ThyrCommPackage import ThyrCommPackage
 
 
 class VSR53(ABC):
@@ -402,7 +402,7 @@ class VSR53USB(VSR53):
 if __name__ == "__main__":
     import logging
 
-    from pyvsr53dl.sys import dev_tty
+    from vsr53.sys import dev_tty
 
     log.setLevel(logging.INFO)
 

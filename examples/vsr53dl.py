@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import logging
 
-from pyvsr53dl.DisplayModes import Orientation as Orientation
-from pyvsr53dl.DisplayModes import Units as Units
-from pyvsr53dl.logger import log
-from pyvsr53dl.vsr53dl import VSR53DL
+from vsr53.DisplayModes import Orientation as Orientation
+from vsr53.DisplayModes import Units as Units
+from vsr53.logger import log
+from vsr53.vsr53dl import VSR53DL
 
 if __name__ == "__main__":
-    from pyvsr53dl.sys import dev_tty
+    from vsr53.sys import dev_tty
 
     log.setLevel(logging.INFO)
     sensor_address = 1

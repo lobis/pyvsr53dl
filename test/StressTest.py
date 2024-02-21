@@ -4,8 +4,8 @@ import csv
 import logging
 from datetime import datetime
 
-from pyvsr53dl.logger import log
-from pyvsr53dl.vsr53dl import VSR53DL
+from vsr53.logger import log
+from vsr53.vsr53dl import VSR53DL
 
 log.setLevel(logging.ERROR)
 
@@ -24,7 +24,7 @@ def open_file():
 
 
 def stress_test():
-    from pyvsr53dl.sys import dev_tty
+    from vsr53.sys import dev_tty
 
     sensor_address = 1
     vacuum_sense = VSR53DL(dev_tty, sensor_address)

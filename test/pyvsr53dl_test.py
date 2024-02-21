@@ -3,16 +3,16 @@ from __future__ import annotations
 import logging
 import unittest
 
-from pyvsr53dl.DisplayModes import Units
-from pyvsr53dl.logger import log
-from pyvsr53dl.vsr53dl import VSR53DL
+from vsr53.DisplayModes import Units
+from vsr53.logger import log
+from vsr53.vsr53dl import VSR53DL
 
 
 class TestVacuumSense(unittest.TestCase):
 
     def test_device_query(self):
         log.setLevel(logging.INFO)
-        from pyvsr53dl.sys import dev_tty
+        from vsr53.sys import dev_tty
 
         sensor_address = 1
         vacuum_sense = VSR53DL(dev_tty, sensor_address)
