@@ -8,28 +8,14 @@ from pyvsr53dl.DisplayModes import Units as Units
 from pyvsr53dl.DisplayModes import Orientation as Orientation
 from pyvsr53dl.logger import log
 from pyvsr53dl import ErrorMessages
+from abc import ABC, abstractmethod
 
 
-class PyVSR53DL:
-    """
-    Thyracont's VSR53DL vacuum sensor RS458 interface
-    """
-    def __init__(self, device_label, address):
-        """
-        Constructor will initiate serial port communication in rs485 mode and define address for device
-        :param device_label: Device label assigned by the operating system when the device is connected
-        :param address: Defined by the address switch mounted in the device from 1 to 16
-        """
-        self._port = serial.rs485.RS485(device_label,
-                                    baudrate=115200,
-                                    parity=serial.PARITY_NONE,
-                                    stopbits=serial.STOPBITS_ONE,
-                                    bytesize=serial.EIGHTBITS,
-                                    timeout=0.02
-                                    )
-
-        self._port.rs485_mode = serial.rs485.RS485Settings()
-        self._address = address
+class PyVSR53(ABC):
+    @abstractmethod
+    def __init__(self):
+        self._port = None
+        self._address = None
 
     def open_communication(self):
         opening_port_trials = 0
@@ -42,7 +28,6 @@ class PyVSR53DL:
             opening_port_trials += 1
             self.open_communication()
 
-
     def get_device_type(self):
         """
         Query of device type, e.g. VSR205
@@ -53,7 +38,6 @@ class PyVSR53DL:
         device_type = self._read_data_transaction(pack)
         log.info(f'Device type: {device_type}')
         return device_type
-
 
     def get_product_name(self):
         """
@@ -180,7 +164,6 @@ class PyVSR53DL:
         log.info(f"Setting display units to: {display_unit}")
         self._write_data_transaction(pack)
 
-
     def get_display_orientation(self):
         """
         Get the display orientation of the device NORMAL or ROTATED
@@ -274,7 +257,7 @@ class PyVSR53DL:
         relay_1_status = self._read_data_transaction(pack)
         pattern1 = "T(.*?)F"
         t_value = float(re.search(pattern1, relay_1_status).group(1))
-        f_value = float(str(relay_1_status).split("F",1)[1] )
+        f_value = float(str(relay_1_status).split("F", 1)[1])
         log.info(f'Relay 1 status: T{t_value} and F{f_value}')
         return t_value, f_value
 
@@ -291,7 +274,6 @@ class PyVSR53DL:
         f_value = float(str(relay_2_status).split("F", 1)[1])
         log.info(f'Relay 2 status: T{t_value} and F{f_value}')
         return t_value, f_value
-
 
     def set_relay_1_status(self, relay_status):
         """
@@ -353,7 +335,7 @@ class PyVSR53DL:
         while not fine_transaction:
             self._send_message(pack)
             message = self._receive_message()
-            if message != b'' and  message[-1] == 13 and len(message) < 30:
+            if message != b'' and message[-1] == 13 and len(message) < 30:
                 fine_transaction = True
             else:
                 log.error("BAD TRANSACTION")
@@ -373,8 +355,42 @@ class PyVSR53DL:
         log.debug(f"RXin' this: {message}")
         return message
 
-if __name__ == '__main__':
 
+class PyVSR53DL(PyVSR53):
+    """
+    Thyracont's VSR53DL vacuum sensor RS458 interface
+    """
+    def __init__(self, device_label: str, address: int = 1, baudrate: int = 115200):
+        """
+        Constructor will initiate serial port communication in rs485 mode and define address for device
+        :param device_label: Device label assigned by the operating system when the device is connected
+        :param address: Defined by the address switch mounted in the device from 1 to 16
+        """
+        self._port = serial.rs485.RS485(device_label,
+                                        baudrate=baudrate,
+                                        parity=serial.PARITY_NONE,
+                                        stopbits=serial.STOPBITS_ONE,
+                                        bytesize=serial.EIGHTBITS,
+                                        timeout=0.02
+                                        )
+
+        self._port.rs485_mode = serial.rs485.RS485Settings()
+        self._address = address
+
+
+class PyVSR53USB(PyVSR53):
+    def __init__(self, device_label: str, address: int = 1, baudrate: int = 9600):
+        self._port = serial.Serial(device_label,
+                                   baudrate=baudrate,
+                                   parity=serial.PARITY_NONE,
+                                   stopbits=serial.STOPBITS_ONE,
+                                   bytesize=serial.EIGHTBITS,
+                                   timeout=0.02
+                                   )
+        self._address = address
+
+
+if __name__ == '__main__':
     from pyvsr53dl.sys import dev_tty
     import logging
 
