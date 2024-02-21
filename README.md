@@ -1,8 +1,11 @@
 # vsr53
 
-This is a Python library to communicate with Thyracont's VSR53USB pressure
-gauge. It should also work with the VSR53DL model (over RS485) but I haven't
-tested it.
+[![Build and Test](https://github.com/lobis/vsr53/actions/workflows/build.yaml/badge.svg)](https://github.com/lobis/vsr53/actions/workflows/build.yaml)
+
+This is a Python library to communicate with
+[Thyracont](https://thyracont-vacuum.com/en/)'s VSR53USB pressure gauge. It
+should also work with the VSR53DL model (over RS485) but I haven't tested it as
+I don't have access to one.
 
 This library is a fork of
 [this repository](https://github.com/IFAEControl/pyvsr53dl). All credits go to
@@ -13,4 +16,20 @@ of the box for the USB version of this sensor, however, with some minor
 modifications such as allowing the user to set the baudrate and updating the
 default value (to 9600 instead of 115200) it works perfectly.
 
-I also updated the packaging to the latest standards and published it to PyPi.
+## Installation
+
+```bash
+pip install vsr53
+```
+
+## Usage
+
+```python
+from vsr53 import VSR53USB
+
+port = "/dev/ttyUSB0" # replace with the device port of your gauge
+with VSR53USB(port) as gauge:
+    print(gauge.get_device_type())
+    print(gauge.get_product_name())
+    print(gauge.get_measurement_value())
+```

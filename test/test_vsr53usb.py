@@ -16,11 +16,11 @@ def vacuum_sensor():
 
 
 def test_device_query(vacuum_sensor):
-    vacuum_sense = vacuum_sensor
+    gauge = vacuum_sensor
 
-    assert vacuum_sense.get_device_type() == "VSR213"
-    assert vacuum_sense.get_product_name() == "VSR53USB"
-    assert vacuum_sense.get_serial_number_device() == "22002816"
-    assert vacuum_sense.get_serial_number_head() == "22002816"
-    assert vacuum_sense.get_device_version() == 2.0
-    assert vacuum_sense.get_firmware_version() == "0003"
+    assert gauge.get_device_type() == "VSR213"
+    assert gauge.get_product_name() == "VSR53USB"
+    assert gauge.get_serial_number_device() == "22002816"
+    assert gauge.get_serial_number_head() == "22002816"
+    assert gauge.get_device_version() == 2.0
+    assert gauge.get_firmware_version() == "0003"

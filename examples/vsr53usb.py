@@ -11,13 +11,13 @@ if __name__ == "__main__":
     log.setLevel(logging.INFO)
     sensor_address = 1
 
-    with VSR53USB(dev_tty, address=sensor_address) as vacuum_sense:
-        vacuum_sense.get_device_type()
-        vacuum_sense.get_product_name()
-        vacuum_sense.get_serial_number_device()
-        vacuum_sense.get_serial_number_head()
-        vacuum_sense.get_device_version()
-        vacuum_sense.get_firmware_version()
-        vacuum_sense.get_measurement_value()
-        vacuum_sense.get_measurement_value_piezo()
-        vacuum_sense.get_measurement_value_pirani()
+    with VSR53USB(dev_tty, address=sensor_address) as gauge:
+        gauge.get_device_type()
+        gauge.get_product_name()
+        gauge.get_serial_number_device()
+        gauge.get_serial_number_head()
+        gauge.get_device_version()
+        gauge.get_firmware_version()
+        gauge.get_measurement_value()
+        gauge.get_measurement_value_piezo()
+        gauge.get_measurement_value_pirani()
