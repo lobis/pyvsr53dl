@@ -13,7 +13,7 @@ if __name__ == "__main__":
     log.setLevel(logging.INFO)
     sensor_address = 1
 
-    with VSR53DL(dev_tty, sensor_address) as vacuum_sense:
+    with VSR53DL(dev_tty, address=sensor_address) as vacuum_sense:
         vacuum_sense.get_device_type()
         vacuum_sense.get_product_name()
         vacuum_sense.get_serial_number_device()

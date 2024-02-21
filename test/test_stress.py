@@ -33,7 +33,7 @@ def stress_test():
     from vsr53.sys import dev_tty
 
     sensor_address = 1
-    vacuum_sense = VSR53DL(dev_tty, sensor_address)
+    vacuum_sense = VSR53DL(dev_tty, address=sensor_address)
     vacuum_sense.open_communication()
 
     filename = f"./results/Stress_test_results_{get_now_timestamp_str()}.csv"

@@ -374,14 +374,15 @@ class VSR53DL(VSR53):
     Thyracont's VSR53DL vacuum sensor RS458 interface
     """
 
-    def __init__(self, device_label: str, address: int = 1, baudrate: int = 115200):
+    def __init__(self, port: str, *, address: int = 1, baudrate: int = 9600):
         """
-        Constructor will initiate serial port communication in rs485 mode and define address for device
-        :param device_label: Device label assigned by the operating system when the device is connected
+        Constructor will initiate serial port communication in rs485 mode and define address for device.
+        :param port: device label assigned by the operating system when the device is connected
         :param address: Defined by the address switch mounted in the device from 1 to 16
+        :param baudrate: Baud rate for data transmission
         """
         self._port = serial.rs485.RS485(
-            device_label,
+            port,
             baudrate=baudrate,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
@@ -394,9 +395,9 @@ class VSR53DL(VSR53):
 
 
 class VSR53USB(VSR53):
-    def __init__(self, device_label: str, address: int = 1, baudrate: int = 9600):
+    def __init__(self, port: str, *, address: int = 1, baudrate: int = 9600):
         self._port = serial.Serial(
-            device_label,
+            port,
             baudrate=baudrate,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
@@ -414,7 +415,7 @@ if __name__ == "__main__":
     log.setLevel(logging.INFO)
 
     sensor_address = 1
-    vacuum_sense = VSR53DL(dev_tty, sensor_address)
+    vacuum_sense = VSR53DL(dev_tty, address=sensor_address)
     vacuum_sense.open_communication()
 
     vacuum_sense.get_device_type()

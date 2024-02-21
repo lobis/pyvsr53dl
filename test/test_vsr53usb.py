@@ -9,7 +9,7 @@ from vsr53.sys import dev_tty
 @pytest.fixture()
 def vacuum_sensor():
     sensor_address = 1
-    vacuum_sense = VSR53USB(dev_tty, sensor_address)
+    vacuum_sense = VSR53USB(dev_tty, address=sensor_address)
     vacuum_sense.open_communication()
     yield vacuum_sense
     vacuum_sense.close_communication()
