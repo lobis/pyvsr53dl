@@ -1,4 +1,4 @@
-# vsr53
+# [VSR53](https://github.com/lobis/vsr53)
 
 [![Build and Test](https://github.com/lobis/vsr53/actions/workflows/build.yaml/badge.svg)](https://github.com/lobis/vsr53/actions/workflows/build.yaml)
 
