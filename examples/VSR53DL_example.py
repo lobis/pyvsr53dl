@@ -5,14 +5,14 @@ import logging
 from pyvsr53dl.DisplayModes import Orientation as Orientation
 from pyvsr53dl.DisplayModes import Units as Units
 from pyvsr53dl.logger import log
-from pyvsr53dl.vsr53dl import PyVSR53DL
+from pyvsr53dl.vsr53dl import VSR53DL
 
 if __name__ == "__main__":
     from pyvsr53dl.sys import dev_tty
 
     log.setLevel(logging.INFO)
     sensor_address = 1
-    vacuum_sense = PyVSR53DL(dev_tty, sensor_address)
+    vacuum_sense = VSR53DL(dev_tty, sensor_address)
     vacuum_sense.open_communication()
     vacuum_sense.get_device_type()
     vacuum_sense.get_product_name()

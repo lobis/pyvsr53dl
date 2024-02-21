@@ -5,7 +5,7 @@ import unittest
 
 from pyvsr53dl.DisplayModes import Units
 from pyvsr53dl.logger import log
-from pyvsr53dl.vsr53dl import PyVSR53DL
+from pyvsr53dl.vsr53dl import VSR53DL
 
 
 class TestVacuumSense(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestVacuumSense(unittest.TestCase):
         from pyvsr53dl.sys import dev_tty
 
         sensor_address = 1
-        vacuum_sense = PyVSR53DL(dev_tty, sensor_address)
+        vacuum_sense = VSR53DL(dev_tty, sensor_address)
         vacuum_sense.open_communication()
 
         self.assertAlmostEqual(vacuum_sense.get_device_type(), "VSR205")

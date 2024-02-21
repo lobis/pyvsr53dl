@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 
 from pyvsr53dl.logger import log
-from pyvsr53dl.vsr53dl import PyVSR53DL
+from pyvsr53dl.vsr53dl import VSR53DL
 
 log.setLevel(logging.ERROR)
 
@@ -27,7 +27,7 @@ def stress_test():
     from pyvsr53dl.sys import dev_tty
 
     sensor_address = 1
-    vacuum_sense = PyVSR53DL(dev_tty, sensor_address)
+    vacuum_sense = VSR53DL(dev_tty, sensor_address)
     vacuum_sense.open_communication()
     writer = open_file()
     for run in range(100000000):

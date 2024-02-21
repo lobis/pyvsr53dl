@@ -15,7 +15,7 @@ from pyvsr53dl.logger import log
 from pyvsr53dl.ThyrCommPackage import ThyrCommPackage
 
 
-class PyVSR53(ABC):
+class VSR53(ABC):
     @abstractmethod
     def __init__(self):
         self._port = None
@@ -362,7 +362,7 @@ class PyVSR53(ABC):
         return message
 
 
-class PyVSR53DL(PyVSR53):
+class VSR53DL(VSR53):
     """
     Thyracont's VSR53DL vacuum sensor RS458 interface
     """
@@ -386,7 +386,7 @@ class PyVSR53DL(PyVSR53):
         self._address = address
 
 
-class PyVSR53USB(PyVSR53):
+class VSR53USB(VSR53):
     def __init__(self, device_label: str, address: int = 1, baudrate: int = 9600):
         self._port = serial.Serial(
             device_label,
@@ -407,7 +407,7 @@ if __name__ == "__main__":
     log.setLevel(logging.INFO)
 
     sensor_address = 1
-    vacuum_sense = PyVSR53DL(dev_tty, sensor_address)
+    vacuum_sense = VSR53DL(dev_tty, sensor_address)
     vacuum_sense.open_communication()
 
     vacuum_sense.get_device_type()
