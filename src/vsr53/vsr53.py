@@ -32,6 +32,22 @@ class VSR53(ABC):
             opening_port_trials += 1
             self.open_communication()
 
+    def close_communication(self):
+        """
+        Closes communication with serial device
+        :return: None
+        """
+        self._port.flush()
+        self._port.close()
+        log.info("Closing communication with device")
+
+    def __enter__(self):
+        self.open_communication()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close_communication()
+
     def get_device_type(self):
         """
         Query of device type, e.g. VSR205
@@ -315,15 +331,6 @@ class VSR53(ABC):
         pack.data = 0
         log.info("Restarting device")
         self._write_data_transaction(pack)
-
-    def close_communication(self):
-        """
-        Closes communication with serial device
-        :return: None
-        """
-        self._port.flush()
-        self._port.close()
-        log.info("Closing communication with device")
 
     def _read_data_transaction(self, pack):
         pack.data = 0
