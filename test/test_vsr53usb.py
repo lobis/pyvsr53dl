@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
+from vsr53 import VSR53USB
 from vsr53.sys import dev_tty
-from vsr53.vsr53 import VSR53USB
 
 
 @pytest.fixture()
