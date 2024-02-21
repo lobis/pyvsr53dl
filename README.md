@@ -1,12 +1,13 @@
-# pyvsr53dl Thyracont's VSR53DL lib
+# vsr53
 
+This is a Python library to communicate with Thyracont's VSR53USB pressure gauge.
+It should also work with the VSR53DL model (over RS485) but I haven't tested it.
 
-Library to communicate with Thyracont's VSR53DL over RS485 using an USB to RS485 adapter. 
+This library is a fork of [this repository](https://github.com/IFAEControl/pyvsr53dl).
+All credits go to the original author.
 
-This library has been implemented by IFAE (www.ifae.es) control software department.
+The original library was designed for the RS485 protocol and does not work out of the box for the USB version of this
+sensor, however, with some minor modifications such as allowing the user to set the baudrate and updating the default
+value (to 9600 instead of 115200) it works perfectly.
 
-It implements most of the commands available for the device using Thyracont's Communication package protocol.
-Given methods allow from retrieving all info about the device (model, version etc) to gathering the pressure measurements in real time.
-Only the relay setting commands are pending although its status can be retrieved and its setting methods might be available in the future.
-
-
+I also updated the packaging to the latest standards and published it to PyPi.
