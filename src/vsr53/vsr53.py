@@ -18,17 +18,17 @@ from vsr53.ThyrCommPackage import ThyrCommPackage
 class VSR53(ABC):
     @abstractmethod
     def __init__(self):
-        self._port = None
+        self._serial = None
         self._address = None
 
     def open_communication(self):
         opening_port_trials = 0
-        if self._port.isOpen():
-            self._port.flush()
+        if self._serial.isOpen():
+            self._serial.flush()
             log.info("Port is Open!")
-        elif not self._port.isOpen() and opening_port_trials < 5:
+        elif not self._serial.isOpen() and opening_port_trials < 5:
             log.info("Port closed, trying to open...")
-            self._port.open()
+            self._serial.open()
             opening_port_trials += 1
             self.open_communication()
 
@@ -37,8 +37,8 @@ class VSR53(ABC):
         Closes communication with serial device
         :return: None
         """
-        self._port.flush()
-        self._port.close()
+        self._serial.flush()
+        self._serial.close()
         log.info("Closing communication with device")
 
     def __enter__(self):
@@ -353,7 +353,7 @@ class VSR53(ABC):
             else:
                 log.error("BAD TRANSACTION")
                 fine_transaction = False
-                self._port.flush()
+                self._serial.flush()
         pack.parse_answer(message)
         if pack.access_code == AC.ERR_RX:
             log.error(f"{ErrorMessages.MSG[pack.data]}")
@@ -361,10 +361,10 @@ class VSR53(ABC):
 
     def _send_message(self, pack):
         log.debug(f"TXin' this: {pack.get_string()}")
-        self._port.write(pack.get_package_ascii_list())
+        self._serial.write(pack.get_package_ascii_list())
 
     def _receive_message(self):
-        message = self._port.readline()
+        message = self._serial.readline()
         log.debug(f"RXin' this: {message}")
         return message
 
@@ -381,29 +381,28 @@ class VSR53DL(VSR53):
         :param address: Defined by the address switch mounted in the device from 1 to 16
         :param baudrate: Baud rate for data transmission
         """
-        self._port = serial.rs485.RS485(
-            port,
-            baudrate=baudrate,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS,
-            timeout=0.02,
-        )
+        self._serial = serial.rs485.RS485()
+        self._serial.port = port
+        self._serial.baudrate = baudrate
+        self._serial.parity = serial.PARITY_NONE
+        self._serial.stopbits = serial.STOPBITS_ONE
+        self._serial.bytesize = serial.EIGHTBITS
+        self._serial.timeout = 0.02
+        self._serial.rs485_mode = serial.rs485.RS485Settings()
 
-        self._port.rs485_mode = serial.rs485.RS485Settings()
         self._address = address
 
 
 class VSR53USB(VSR53):
     def __init__(self, port: str, *, address: int = 1, baudrate: int = 9600):
-        self._port = serial.Serial(
-            port,
-            baudrate=baudrate,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS,
-            timeout=0.02,
-        )
+        self._serial = serial.Serial()
+        self._serial.port = port
+        self._serial.baudrate = baudrate
+        self._serial.parity = serial.PARITY_NONE
+        self._serial.stopbits = serial.STOPBITS_ONE
+        self._serial.bytesize = serial.EIGHTBITS
+        self._serial.timeout = 0.02
+
         self._address = address
 
 
