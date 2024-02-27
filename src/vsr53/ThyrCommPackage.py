@@ -1,11 +1,6 @@
 from __future__ import annotations
 
-from vsr53.AccessCodes import AccessCode as AC
-from vsr53.Commands import Commands as CMD
-from vsr53.DisplayModes import Units as Units
 from vsr53.logger import log as log
-
-# from DISPLAY import Orientation as Orientation
 
 
 class ThyrCommPackage:
@@ -136,16 +131,5 @@ class ThyrCommPackage:
         return answer
 
     @staticmethod
-    def get_ascii_list(string):
-        return [ord(c) for c in (string)]
-
-
-if __name__ == "__main__":
-    SENSOR_ADDRESS = 2
-    t_package = ThyrCommPackage(SENSOR_ADDRESS)
-    t_package.access_code = AC.WR_TX
-    t_package.cmd = CMD.Display_Unit
-    t_package.data = Units.MBAR
-    log.info(t_package.get_package())
-    log.info(t_package.get_string())
-    # print([hex(value) for value in t_package.get_package_ascii_list()])
+    def get_ascii_list(s: str):
+        return [ord(c) for c in s]

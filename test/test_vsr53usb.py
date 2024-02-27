@@ -3,13 +3,13 @@ from __future__ import annotations
 import pytest
 
 from vsr53 import VSR53USB
-from vsr53.sys import dev_tty
 
 
 @pytest.fixture()
 def vacuum_sensor():
+    port = "/dev/ttyUSB0"
     sensor_address = 1
-    vacuum_sense = VSR53USB(dev_tty, address=sensor_address)
+    vacuum_sense = VSR53USB(port, address=sensor_address)
     vacuum_sense.open_communication()
     yield vacuum_sense
     vacuum_sense.close_communication()
